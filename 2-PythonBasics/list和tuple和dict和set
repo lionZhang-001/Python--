@@ -1,0 +1,208 @@
+list
+
+list是一种有序的集合,可以随时添加和删除其中的元素
+list的初始化方式:
+classmates = ['Michael', 'Bob', 'Tracy']
+list常用的函数:
+
+1: len()    该函数可以获得list元素的个数
+len(calssmates)   输出:  3
+2: append()  用于往list末尾追加元素
+>>> classmates.append('Adam')
+>>> classmates
+['Michael', 'Bob', 'Tracy', 'Adam']
+3: pop()   删除list末尾的元素
+>>> classmates.pop()
+'Adam'
+>>> classmates
+['Michael', 'Jack', 'Bob', 'Tracy']
+4: pop(i)   删除指定位置的元素，用pop(i)方法，其中i是索引位置
+>>> classmates.pop(1)
+'Jack'
+>>> classmates
+['Michael', 'Bob', 'Tracy']
+5:insert(i,'插入内容')   这里是说将指定内容插入到i位置,i是索引位置
+>>> classmates.insert(1, 'Jack')
+>>> classmates
+['Michael', 'Jack', 'Bob', 'Tracy', 'Adam']
+
+如何去访问某个元素??
+跟c++中的数组一样,使用索引来访问list中的元素,索引从0开始:
+>>> classmates[0]
+'Michael'
+>>> classmates[1]
+'Bob'
+如果要取最后一个元素，除了计算索引位置外，还可以用-1做索引，直接获取最后一个元素：
+>>> classmates[-1]
+'Tracy'
+以此类推，可以获取倒数第2个、倒数第3个：
+>>> classmates[-2]
+'Bob'
+>>> classmates[-3]
+'Michael'
+
+ist里面的元素的数据类型也可以不同，比如：
+>>> L = ['Apple', 123, True]
+list元素也可以是另一个list，比如：
+>>> s = ['python', 'java', ['asp', 'php'], 'scheme']
+>>> len(s)
+4
+要注意s只有4个元素，其中s[2]又是一个list，如果拆开写就更容易理解了：
+>>> p = ['asp', 'php']
+>>> s = ['python', 'java', p, 'scheme']
+要拿到'php'可以写p[1]或者s[2][1]，因此s可以看成是一个二维数组
+
+
+
+要把某个元素替换成别的元素，可以直接赋值给对应的索引位置：
+>>> classmates[1] = 'Sarah'
+>>> classmates
+['Michael', 'Sarah', 'Tracy']
+
+turple 
+也是一种有序的集合,称为元组.与list类似,但是tuple一旦初始化就不能修改
+>>> classmates = ('Michael', 'Bob', 'Tracy')
+不过它没有append(),pop(),insert()这样的方法.其他获取元素的方法和list是一样的，
+你可以正常地使用classmates[0]，classmates[-1]，但不能赋值成另外的元素。
+不可变的tuple有什么意义？因为tuple不可变，所以代码更安全。如果可能，能用tuple代替list就尽量用tuple
+
+tuple的陷阱：当你定义一个tuple时，在定义的时候，tuple的元素就必须被确定下来，比如:
+>>> t = (1, 2)
+>>> t
+(1, 2)
+如果要定义一个空的tuple，可以写成()：
+>>> t = ()
+>>> t
+()
+但是，要定义一个只有1个元素的tuple，如果你这么定义：
+>>> t = (1)
+>>> t
+1
+定义的不是tuple，是1这个数！这是因为括号()既可以表示tuple，又可以表示数学公式中的小括号，这就产生了歧义，因此，Python规定，这种情况下，
+按小括号进行计算，计算结果自然是1。所以，只有1个元素的tuple定义时必须加一个逗号,，来消除歧义：
+>>> t = (1,)
+>>> t
+(1,)
+
+可变的tuple:
+>>> t = ('a', 'b', ['A', 'B'])
+>>> t[2][0] = 'X'
+>>> t[2][1] = 'Y'
+>>> t
+('a', 'b', ['X', 'Y'])
+
+可以自己想一想是为什么
+表面上看，tuple的元素确实变了，但其实变的不是tuple的元素，而是list的元素。tuple一开始指向的list并没有改成别的list，所以，tuple所谓的“不变”是说，
+tuple的每个元素，指向永远不变。即指向'a'，就不能改成指向'b'，指向一个list，就不能改成指向其他对象，但指向的这个list本身是可变的！理解了
+“指向不变”后，要创建一个内容也不变的tuple怎么做？那就必须保证tuple的每一个元素本身也不能变
+
+
+dict
+dict类似于c++中的map,使用键-值(key-value)存储,查找速度极快
+>>> d = {'Michael': 95, 'Bob': 75, 'Tracy': 85}
+>>> d['Michael']
+95
+把数据放入dict的方法，除了初始化时指定外，还可以通过key放入
+>>> d['Bob'] = 67
+>>> d['Bob']
+67
+由于一个key只能对应一个value，所以，多次对一个key放入value，后面的值会把前面的值冲掉：
+>>> d['Jack'] = 90
+>>> d['Jack']
+90
+>>> d['Jack'] = 88
+>>> d['Jack']
+88
+如何查看key值是否存在??有两种方式:
+1-通过in来判断key是否存在
+>>> 'Thomas' in d
+False
+2-是通过dict提供的get()方法，如果key不存在，可以返回None，或者自己指定的value：
+>>> d.get('Thomas')
+>>> d.get('Thomas', -1)
+-1
+要删除一个key，用pop(key)方法，对应的value也会从dict中删除：
+>>> d.pop('Bob')
+75
+>>> d
+{'Michael': 95, 'Tracy': 85}
+
+注意:dict的key必须是不可变对象!!!
+这是因为dict根据key来计算value的存储位置，如果每次计算相同的key得出的结果不同，那dict内部就完全混乱了。这个通过key计算位置的算法称为哈希算法(Hash）。
+要保证hash的正确性，作为key的对象就不能变。在Python中，字符串、整数等都是不可变的，因此，可以放心地作为key。而list是可变的，就不能作为key：
+
+list与dict的比较:
+dict:查找和插入的速度极快，不会随着key的增加而变慢；需要占用大量的内存，内存浪费多。
+list:查找和插入的时间随着元素的增加而增加；占用空间小，浪费内存很少
+
+
+set
+set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。
+初始化问题:
+要创建一个set，需要提供一个list作为输入集合:
+>>> s = set([1, 2, 3])
+>>> s
+{1, 2, 3}
+注意，传入的参数[1, 2, 3]是一个list，而显示的{1, 2, 3}只是告诉你这个set内部有1，2，3这3个元素，显示的顺序也不表示set是有序的
+重复元素在set中自动被过滤：
+>>> s = set([1, 1, 2, 2, 3, 3])
+>>> s
+{1, 2, 3}
+常用的函数:
+add(key)--可以添加元素到set中;remove(key)--删除元素;
+
+set可以看成数学意义上的无序和无重复元素的集合，因此，两个set可以做数学意义上的交集、并集等操作：
+>>> s1 = set([1, 2, 3])
+>>> s2 = set([2, 3, 4])
+>>> s1 & s2
+{2, 3}
+>>> s1 | s2
+{1, 2, 3, 4}
+注意::同dict一样,set也是无法将list作为元素放入进去!!
+
+
+常见的函数:
+sort()--排序函数
+>>> a = ['c', 'b', 'a']
+>>> a.sort()
+>>> a
+['a', 'b', 'c']
+replace()--替换
+>>> a = 'abc'
+>>> a.replace('a', 'A')
+'Abc'
+>>> a
+'abc'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
